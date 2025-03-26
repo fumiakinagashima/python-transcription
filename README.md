@@ -5,5 +5,5 @@ Implementing a transcription program based on Python and Whisper as a web applic
 
 
 ```
-pip install openai-whisper Flask
+pip install openai-whisper Flask psycopg2
 ```

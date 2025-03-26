@@ -3,6 +3,7 @@ import os
 from flask import Flask, send_from_directory, request
 from flask_cors import CORS
 import whisper
+import psycopg2
 
 model = whisper.load_model('medium')
 app = Flask(__name__)
@@ -32,12 +33,22 @@ def audio():
 @app.post('/store')
 def store():
   data = request.get_json()
-  # TODO Implemnt store to database/ORM and branch out with flag
-  # ...
 
-  # save to file
-  with open(data['filename'], 'w') as writer:
-    writer.write(data['text'])
+  if data['type'] == 'file':
+    # save to file
+    with open(data['filename'], 'w') as writer:
+      writer.write(data['text'])
+
+  else:
+    # save to database
+    # Attension connect info set to .env for product.
+    connection = psycopg2.connect("host=localhost dbname=postgres user=postgres password=pass")
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO transcription(text) VALUES (%s)", (data['text'],))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
   return { "result": "ok" }
 
 # Entry Point
