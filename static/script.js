@@ -10,9 +10,7 @@ btnStart.addEventListener('click', async function() {
   });
 
   mediaRecorder = new MediaRecorder(stream);
-  mediaRecorder.ondataavailable = (e) => {
-    chunks.push(e.data);
-  };
+  mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
 
   mediaRecorder.onstop = async () => {
     const trs = document.getElementById("trs");
@@ -24,7 +22,7 @@ btnStart.addEventListener('click', async function() {
     const audioURL = window.URL.createObjectURL(blob);
     audio.src = audioURL;
     
-    // Send To API and get the response that transcript text.
+    // Send To API.
     const fd = new FormData();
     fd.append('audio', blob, 'audio.ogg');
     const response = await fetch('http://localhost:5000/transcription', {

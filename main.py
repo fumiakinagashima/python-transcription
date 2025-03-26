@@ -28,13 +28,17 @@ def audio():
   os.remove(file_name)
   return result["text"]
 
-# TODO Data save to database or files.
+# Data save to database or files.
 @app.post('/store')
 def store():
   data = request.get_json()
-  # TODO: Implement save function.
+  # TODO Implemnt store to database/ORM and branch out with flag
   # ...
 
+  # save to file
+  with open(data['filename'], 'w') as writer:
+    writer.write(data['text'])
+  return { "result": "ok" }
 
 # Entry Point
 if __name__ == '__main__':
